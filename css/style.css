@@ -1,0 +1,64 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    margin: 0vh;
+    font-family: 'Protest Guerrilla', sans-serif;
+    display:grid;
+    /* mobile first - single column */
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 30px auto;
+    grid-template-areas: 
+      "hdr"
+      "ftr"
+      "content"    
+  }
+
+  /*button {
+    font-family: 'Protest Guerrilla', sans-serif;
+    background-color:  Grey; /* Green */
+    color: pink;
+    padding: 15px 32px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    /* button.style.visibility = "hidden"; ----- for JS 
+  } */
+
+  header {
+    grid-area: hdr;
+    background-color: black;
+    color: white;
+    border: 0.2vmin solid white;
+  }
+  
+
+  footer {
+    grid-area: ftr;
+    background-color:black;
+    border:0.2vmin soild white;
+    color: white;
+  }
+  
+
+  main {
+    grid-area: content;
+    background-color: black;
+    color: white;
+  }
+  
+
+  header, footer, main {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+  }
+  
+
+  
+  
+  
