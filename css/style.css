@@ -3,22 +3,29 @@
   }
   
   body {
+    /*background-image: url("https://i.imgur.com/NClBDst.jpg"); */
+    background: black;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: white;
     height: 100vh;
     margin: 0vh;
     font-family: 'Protest Guerrilla', sans-serif;
     display:grid;
     /* mobile first - single column */
-    grid-template-columns: 1fr;
-    grid-template-rows: 50px 30px auto;
+    justify-content: center;
+    grid-template-rows: 50px 60px auto;
     grid-template-areas: 
       "hdr"
       "ftr"
-      "content"    
+      "field" ;   
   }
-
+    
+  
   /*button {
     font-family: 'Protest Guerrilla', sans-serif;
-    background-color:  Grey; /* Green */
+    background-color:  Grey; /* Green 
     color: pink;
     padding: 15px 32px;
     border-radius: 12px;
@@ -26,39 +33,63 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    /* button.style.visibility = "hidden"; ----- for JS 
+     button.style.visibility = "hidden"; ----- for JS 
   } */
 
   header {
     grid-area: hdr;
-    background-color: black;
-    color: white;
-    border: 0.2vmin solid white;
-  }
-  
-
-  footer {
-    grid-area: ftr;
-    background-color:black;
-    border:0.2vmin soild white;
-    color: white;
-  }
-  
-
-  main {
-    grid-area: content;
-    background-color: black;
-    color: white;
-  }
-  
-
-  header, footer, main {
     display: flex;
     justify-content: center;
     align-items:center;
+    background-color: black;
+    color: white;
+   
   }
   
+  footer {
+    grid-area: ftr;
+    display: flex;
+    grid-template-rows: 30px 30px;
+    justify-content: space-around;
+    align-items:center;
+    background-color:black;
+    grid-template-areas: 
+    "diff"
+    "state"
+  }
 
+  #button {
+    grid-area: "state";
+    display: grid;
+    
+  }
+
+  #field {
+    width: 66vh;
+    height: 66vh;
+    margin-top: 8%;
+    grid-area: field;
+    background-color: black;
+    display:grid;
+    grid-template-columns: repeat(8, 8vmin);
+    grid-template-rows: repeat(8, 8vmin);
+    justify-content: center;
+    align-items:center;
   
+    
+  }
+  
+  #field > div {
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    outline-style: 0.5vmin solid grey;
+    border-top: 1vh solid white;
+    border-right: 1vh solid grey;
+    border-bottom: 1vh solid grey;
+    border-left: 1vh solid white;
+    height: 8vmin;
+    width: 8vmin;
+  }
   
   

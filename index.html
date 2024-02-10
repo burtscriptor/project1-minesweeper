@@ -10,28 +10,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet">
     <script defer src="js/main.js"></script>
     
+    
 </head>
 <body>
-    <header><h1>Mine Sweeper</h1></header>
-  <main><!--<button>Play</button>--></main>
-    <div class="container">
-        <div class="field"></div><!--closing bracket for field-->
-            
-        
-        
-        
-        
-        
-        
-        
-        </div><!--closing bracket for field-->
-    </div><!--closing bracket for container-->
-
-
-
-
-
-  <footer><h3 id="timer">Timer</h3><h3>Tiles uncovered:0/100</h3><h3>Mines: 0/10</h3> </footer>
+    <header><h1>Mine Sweeper</h1>
+    </header>
+    <footer>  
+            <input type="radio" value="mild" class="diff" name="difficulty">
+            <label for="mild">Mild</label>
+            <input type="radio" value="moderate" class="diff" name="difficulty">
+            <label for="moderate">Moderate</label>
+            <input type="radio" value="severe" class="diff" name="difficulty">
+            <label for="severe">Severe</label>
+                <h3 class="state">Mines:0</h3>
+                <span id="timer" class="state">00:00</span>
+                    <button id="go">GO</button>
+    </footer>
+   
+    <div id="field"> 
+    </div><!--closing bracket for field-->
+   
+  
 
 </body>
 </html>
