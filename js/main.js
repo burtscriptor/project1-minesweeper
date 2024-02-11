@@ -5,91 +5,91 @@ const state = {
     flags: null, // flags left to use, a decending number
     limbsLeft: null, // counts the number of limbs left( lives), is a decending mumber
 };
-let time = 10000000; // NEED TO MOVE THIS TO INIT
-let startTime;
-let elapsedTime;
+
+const field = [
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+];
+
+
 /*-----Variables-----*/
-const difficulty = {
-    mild: 10,
-    moderate: 40,
-    severe: 99,
-}
+const rowLength = 8; // neesd to think about how to change these three when it comes to difficulyt selector
+const columnLength = 8;
+const numberOfMines = 10;
+
+let time = 10000000; // need to move to init?
+let startTime;    
+let elapsedTime;
   
-  /*----- cached elements  -----*/
-  //const cells = d
- const goButton = document.getElementById('go'); 
- /*let difficultyButtons = document.querySelector('radio').value; // Radio buttons for difficulty 
- 
- 
- /*-----Opening actions----*/
- 
+/*----- cached elements  -----*/
+const goButton = document.getElementById('go'); 
+const mineField = document.querySelectorAll('#field > div');
+
   
  /*----- event listeners -----*/
- goButton.addEventListener('click', init);
-  // loop through squares and listen for a click on each
- // squares.forEach(function(square) {
-   // square.addEventListener('click', placeTile);
- // });
-  
+ mineField.forEach(function (cell){
+    cell.addEventListener('click', detectMine);
+ });
+
+ //document.querySelector('input[name="difficulty"]:checked')
   
   // WE NEED THE EVENT LISTENER AKA EVENT HANDLER (function)??
   
   
   
-  /*----- functions -----*/
-  const makefield = (size) => {
+/*----- functions -----*/
+const makeField = (size) => {
     for(let i = 0; i < size; i++ ) {
        const makeCell = document.createElement('div');
-       // makeCell.style.backgroundColor = 'light grey';
         makeCell.style.color = 'white';
         makeCell.innerText = i;
         makeCell.setAttribute('id', 'cell_' + i);
         document.getElementById('field').appendChild(makeCell);
     } 
-   };
+};
   
-  const init = () => {
-    makefield(64);
+const init = () => {
+    makeField(64);
     timeToStringConverter(time);
     startClock();
+    
+    
+};
 
-    field = [
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-        [0,0,0,0,0,0,0,0]
-    ]
-    }
-  
-  
-  
-  const timeToStringConverter = (time) => {
+
+const randomiseMines = (numberOfMines, rowLength, columnLength) => {
+    for(let i = 0; i < numberOfMines; i++) {
+      let randomRow =  Math.floor(Math.random() * rowLength)
+      let randomColumn = Math.floor(Math.random() * columnLength)
+      field[randomRow][randomColumn] !== 'm' ? field[randomRow][randomColumn] = 'm' : i--;
+   }
+};
+
+
+const timeToStringConverter = (time) => {
     let diffInHrs = time / 3600000;
     let hh = Math.floor(diffInHrs);
-  
     let diffInMin = (diffInHrs - hh) * 60;
     let mm = Math.floor(diffInMin);
-  
     let diffInSec = (diffInMin - mm) * 60;
     let ss = Math.floor(diffInSec);
-  
-    
     let formattedMM = mm.toString().padStart(2, "0");
     let formattedSS = ss.toString().padStart(2, "0");
-  
     return `${formattedMM}:${formattedSS}`;
-  }
+};
   
-  const startClock = () => {
+const startClock = () => {
     startTime = Date.now();
     setInterval(function printTime() {
       elapsedTime = Date.now() - startTime;
       document.getElementById("timer").innerHTML = timeToStringConverter(elapsedTime);
     }, 1000);
-  }
+};
   
-  
+const detectMine = () => console.log('click test'); 
