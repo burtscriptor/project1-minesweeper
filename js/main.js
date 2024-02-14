@@ -3,21 +3,15 @@ const state = {
     currentTile: null, // tracks the selectored cell
     minesInPlay: 10, // number of mines without flags, a descending number
     flags: null, // flags left to use, a decending number
-    limbsLeft: 4, // counts the number of limbs left( lives), is a decending mumber
+    //limbsLeft: 4, // counts the number of limbs left( lives), is a decending mumber
 };
 
 minesNearBy = null;
 
-const field = [
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+let field = [
+    
 ];
+
 
 
 /*-----Variables-----*/
@@ -32,6 +26,7 @@ let mineField = null;
 let time = 10000000; // need to move to init?
 let startTime;    
 let elapsedTime;
+let timerInterval;
   
 /*----- cached elements  -----*/
 const goButton = document.getElementById('go'); 
@@ -90,15 +85,35 @@ const attachEventListeners = () => {
         detectMine();
         });
      });  
+     mineField.forEach(function (cell){
+        cell.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            state.currentTile = cell;
+            placeFlag();  
+          });
+       // 
+       // detectMine();
+        });
 };
 
 const init = () => {
+    field = [
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+    ];
     makeField(64);
     timeToStringConverter(time);
     startClock();
-    minesNearBy = 0;
     randomiseMines(numberOfMines, rowLength, columnLength);
     mineCounterDisplay();
+    minesNearBy = 0;
+    state.minesInPlay = 10;
 };
 
 
@@ -130,21 +145,27 @@ const startClock = () => {
       document.getElementById("timer").innerHTML = timeToStringConverter(elapsedTime);
     }, 1000);
 };
+
+function resetTime() {
+    elapsedTime = 0;
+    document.getElementById("timer").innerHTML = timeToStringConverter(elapsedTime);
+  }
   
 const detectMine = () => {
 const id = state.currentTile.id;
     let row = parseFloat(id[1]); // first X
     let column = parseFloat(id[3]); // second X
         if(field[row][column] === 'm') {
-    console.log('mine');
-    landedOnMine();
-        } else{
-        minesInProximity(row, column);  
+    //console.log('mine');
+        landedOnMine();
+        } else if (field[row][column] !== 1) {
+        recursion(row, column);
+            //minesInProximity(row, column);  
     }
 };
 
 const minesInProximity = (row, column) => {
-    console.log(typeof row, row, typeof column, column)
+   // console.log(typeof row, row, typeof column, column)
     for (let i = row - 1; i <= row + 1; i++) {
         for (let c = column - 1; c <= column + 1; c++) {
             if (i === row && c === column) {
@@ -153,12 +174,20 @@ const minesInProximity = (row, column) => {
             if (i >= 0 && i <= rowLength - 1 && c >= 0 && c <= columnLength - 1) {
                 if (field[i][c] === 'm') {
                     minesNearBy++;
-                }
+                    
+                //}else{
+                  //  recursion(row, column);
+               }
             }
         }
     }
     displayMinesNearBy();
+    render(row, column);
 };    
+
+const render = (row, column) => {
+    field[row][column] = 1;
+}
 
 const displayMinesNearBy = () => { 
 let cellDisplay = minesNearBy;
@@ -198,24 +227,71 @@ const landedOnMine = () => {
     state.currentTile.style.backgroundSize = '100% 100%';
     state.currentTile.style.backgroundRepeat = 'no-repeat';
     state.currentTile.style.border = '0.2vmin solid darkgrey';
-    state.minesInPlay -=1;
-    mineCounterDisplay();
+    //state.minesInPlay -=1;
+   // mineCounterDisplay();
     
-    if(state.limbsLeft >= 1) {
-        state.limbsLeft -= 1;
-        alert(`Landed on mine - lost a limb. ${state.limbsLeft} limbs left.`)
-    }else if (state.limbsLeft === 0) {
+   // if(state.limbsLeft >= 1) {
+      //  state.limbsLeft -= 1;
+       // alert(`Landed on mine - lost a limb. ${state.limbsLeft} limbs left.`)
+   // }else if (state.limbsLeft < 1) {
         alert('Game Over!'); 
-       const toRemove = document.body.getElementsByClassName('cell');
-       console.log(toRemove);
-       toRemove.remove()
-    
-     
-    
-  }
+        gameOver();
+       
+
+  
+};
+
+const gameOver = () => {
+    const toRemove = document.body.getElementsByClassName('cell');
+       [...toRemove].forEach((e) =>
+       e.remove());
+
+}
+
+const mineCounterDisplay = (message) => {
+    mineDisplay.innerText = `Mines:${state.minesInPlay}`;
+}
+
+const placeFlag = () => {
+    const id = state.currentTile.id;
+    let row = parseFloat(id[1]); // first X
+    let column = parseFloat(id[3]); // second X
+    if (field[row][column] === 1){
+    return;
+    }else{
+    state.currentTile.style.backgroundImage = "url('images/skull.png')";
+    state.currentTile.style.backgroundSize = '100% 100%';
+    state.currentTile.style.backgroundRepeat = 'no-repeat';
+    state.currentTile.style.border = '0.2vmin solid darkgrey';
+        if(field[row][column] === 'm') {
+           mineDisplay.innerText = `Mines:${state.minesInPlay -= 1}`; 
+        } 
+
+};
+};
+
+const checkWinner = () => {
+    if (state.minesInPlay === 0 && state.revealedTiles === (totalTiles - totalMines)) {
+        // All mines are flagged and all non-mine tiles are revealed
+        gameWon();
+    }
 };
 
 
-const mineCounterDisplay = () => {
-    mineDisplay.innerText = state.minesInPlay;
+    const recursion = (row, column) => {
+    const id = state.currentTile.id;
+    row = parseFloat(id[1]); // first X
+    column = parseFloat(id[3]); // second X
+    if(field[row][column] === 0) {
+    for(let i = row -1; i <= row; i++) {
+        for(let c = column -1; c <= column; c++) {
+            if(i => 0 && i < field.length && c >= 0 && c < field[0].length && field[i][c] !== 'm' || field[i][c] !== '1'){
+                state.currentTile.style.backgroundColor = "pink";
+                recursion(row, column);
+                
+                
+            }    
+        }
+    }
 }
+};
