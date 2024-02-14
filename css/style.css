@@ -82,7 +82,7 @@
   #field > div {
     justify-content: center;
     align-items: center;
-    background-color: lightgrey;
+    background-color: lightgray;
     outline-style: 0.5vmin solid grey;
     border-top: 1vh solid white;
     border-right: 1vh solid grey;
@@ -90,6 +90,10 @@
     border-left: 1vh solid white;
     height: 8vmin;
     width: 8vmin;
+    text-align:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   

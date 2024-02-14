@@ -25,6 +25,7 @@ const field = [
 const rowLength = 8; // neesd to think about how to change these three when it comes to difficulyt selector
 const columnLength = 8;
 const numberOfMines = 10;
+let mineField = null;
 //let row = null;
 //let column = null;
 
@@ -34,6 +35,7 @@ let elapsedTime;
   
 /*----- cached elements  -----*/
 const goButton = document.getElementById('go'); 
+mineDisplay = document.getElementById('mine display');
 //const mineField = Array.from(document.querySelectorAll('#field > div'));
 
   
@@ -41,6 +43,7 @@ const goButton = document.getElementById('go');
  goButton.addEventListener('click', function(){
     init();
  })
+
  
 
  //document.querySelector('input[name="difficulty"]:checked')
@@ -56,7 +59,7 @@ const makeField = (size) => {
         makeCell.style.color = 'white';
         makeCell.classList.add('cell');
         document.getElementById('field').appendChild(makeCell);
-        makeCell.innerText = i;
+
         if (i >= 0 && i <= 7) {
             makeCell.setAttribute('id', 'r0' + 'c' + i);
         }else if (i >= 8 && i <= 15 ) {
@@ -80,7 +83,7 @@ attachEventListeners();
 };
   
 const attachEventListeners = () => {
-    const mineField = Array.from(document.querySelectorAll('#field > div'));
+    mineField = Array.from(document.querySelectorAll('#field > div'));
     mineField.forEach(function (cell){
         cell.addEventListener('click', function() {
         state.currentTile = cell;
@@ -95,14 +98,15 @@ const init = () => {
     startClock();
     minesNearBy = 0;
     randomiseMines(numberOfMines, rowLength, columnLength);
+    mineCounterDisplay();
 };
 
 
 const randomiseMines = (numberOfMines, rowLength, columnLength) => {
     for(let i = 0; i < numberOfMines; i++) {
-      let randomRow =  Math.floor(Math.random() * rowLength)
-      let randomColumn = Math.floor(Math.random() * columnLength)
-      field[randomRow][randomColumn] !== 'm' ? field[randomRow][randomColumn] = 'm' : i--;
+        let randomRow =  Math.floor(Math.random() * rowLength)
+        let randomColumn = Math.floor(Math.random() * columnLength)
+        field[randomRow][randomColumn] !== 'm' ? field[randomRow][randomColumn] = 'm' : i--;
    }
 };
 
@@ -129,27 +133,18 @@ const startClock = () => {
   
 const detectMine = () => {
 const id = state.currentTile.id;
-// assuming rXcX
-// indexes: 0123
-let row = parseFloat(id[1]); // first X
-let column = parseFloat(id[3]); // second X
-
-
-if(field[row][column] === 'm') {
+    let row = parseFloat(id[1]); // first X
+    let column = parseFloat(id[3]); // second X
+        if(field[row][column] === 'm') {
     console.log('mine');
     landedOnMine();
-} else{
-    minesInProximity(row, column);
-
-}
+        } else{
+        minesInProximity(row, column);  
+    }
 };
 
 const minesInProximity = (row, column) => {
-    document.getElementById(state.currentTile.id).style.backgroundColor = 'green';
     console.log(typeof row, row, typeof column, column)
-   
-
-
     for (let i = row - 1; i <= row + 1; i++) {
         for (let c = column - 1; c <= column + 1; c++) {
             if (i === row && c === column) {
@@ -162,22 +157,65 @@ const minesInProximity = (row, column) => {
             }
         }
     }
+    displayMinesNearBy();
 };    
 
-
-
-
+const displayMinesNearBy = () => { 
+let cellDisplay = minesNearBy;
+if(cellDisplay === 0 ){
+    state.currentTile.style.innerText = ' ';
     
-  
+}else{
+    state.currentTile.innerText = cellDisplay;
+}
+if(cellDisplay === 1){
+    state.currentTile.style.color = 'blue';
+}
+if(cellDisplay === 2){
+state.currentTile.style.color = 'green'; 
+}
+if(cellDisplay === 3){
+    state.currentTile.style.color = 'red'; 
+}
+if(cellDisplay === 4){
+    state.currentTile.style.color = 'dark blue'; 
+}
+if(cellDisplay === 5){
+    state.currentTile.style.color = 'maroon'; 
+}
+if(cellDisplay === 4){
+    state.currentTile.style.color = 'dark blue'; 
+}
+state.currentTile.style.fontSize = '3rem';
 
-    
+state.currentTile.style.border= '0.2vmin solid darkgrey';
+minesNearBy = null;
+};
 
 
 const landedOnMine = () => {
+    state.currentTile.style.backgroundImage = "url('images/mine.png')";
+    state.currentTile.style.backgroundSize = '100% 100%';
+    state.currentTile.style.backgroundRepeat = 'no-repeat';
+    state.currentTile.style.border = '0.2vmin solid darkgrey';
+    state.minesInPlay -=1;
+    mineCounterDisplay();
+    
     if(state.limbsLeft >= 1) {
         state.limbsLeft -= 1;
         alert(`Landed on mine - lost a limb. ${state.limbsLeft} limbs left.`)
     }else if (state.limbsLeft === 0) {
         alert('Game Over!'); 
-    }
+       const toRemove = document.body.getElementsByClassName('cell');
+       console.log(toRemove);
+       toRemove.remove()
+    
+     
+    
+  }
 };
+
+
+const mineCounterDisplay = () => {
+    mineDisplay.innerText = state.minesInPlay;
+}
