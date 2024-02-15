@@ -3,14 +3,13 @@
   }
   
   body {
-    /*background-image: url("https://i.imgur.com/NClBDst.jpg"); */
     background: black;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     color: white;
     height: 100vh;
-    margin: 0vh;
+    margin-top: 10vh;
     font-family: 'Protest Guerrilla', sans-serif;
     display:grid;
     /* mobile first - single column */
@@ -21,20 +20,7 @@
       "ftr"
       "field" ;   
   }
-    
-  
-  /*button {
-    font-family: 'Protest Guerrilla', sans-serif;
-    background-color:  Grey; /* Green 
-    color: pink;
-    padding: 15px 32px;
-    border-radius: 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-     button.style.visibility = "hidden"; ----- for JS 
-  } */
+
 
   header {
     grid-area: hdr;
@@ -54,13 +40,13 @@
     align-items:center;
     background-color:black;
     grid-template-areas: 
-    "diff"
-    "state"
+
   }
 
   #button {
     grid-area: "state";
-    display: grid;
+    display: flex;
+    padding:10px 24px;
     
   }
 
@@ -82,7 +68,7 @@
   #field > div {
     justify-content: center;
     align-items: center;
-    background-color: lightgray;
+    background-color: lightgrey;
     outline-style: 0.5vmin solid grey;
     border-top: 1vh solid white;
     border-right: 1vh solid grey;
@@ -90,10 +76,8 @@
     border-left: 1vh solid white;
     height: 8vmin;
     width: 8vmin;
-    text-align:center;
+    text-align: center;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
   
   

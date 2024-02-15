@@ -5,48 +5,28 @@ const state = {
     flags: null, // flags left to use, a decending number
     revealedTiles: null, //
 };
-
 minesNearBy = null;
-
-let field = [
-    
-];
-
-
+let field = [] ;  
 
 /*-----Variables-----*/
-
-const rowLength = 8; // neesd to think about how to change these three when it comes to difficulyt selector
+const rowLength = 8;
 const columnLength = 8;
 const numberOfMines = 10;
 let mineField = null;
-//let row = null;
-//let column = null;
-
-let time = 10000000; // need to move to init?
+let time = 10000000; 
 let startTime;    
 let elapsedTime;
 let timerInterval;
   
 /*----- cached elements  -----*/
 const goButton = document.getElementById('go'); 
-mineDisplay = document.getElementById('mine display');
-//const mineField = Array.from(document.querySelectorAll('#field > div'));
+mineDisplay = document.getElementById('mine display')
 
-  
- /*----- event listeners -----*/
+/*----- event listeners -----*/
  goButton.addEventListener('click', function(){
     init();
- })
-
+});
  
-
- //document.querySelector('input[name="difficulty"]:checked')
-  
-  // WE NEED THE EVENT LISTENER AKA EVENT HANDLER (function)??
-  
-  
-  
 /*----- functions -----*/
 const makeField = (size) => {
     for(let i = 0; i < size; i++ ) {
@@ -78,14 +58,14 @@ attachEventListeners();
 };
   
 const attachEventListeners = () => {
-    mineField = Array.from(document.querySelectorAll('#field > div'));
-    mineField.forEach(function (cell){
+        mineField = Array.from(document.querySelectorAll('#field > div'));
+        mineField.forEach(function (cell){
         cell.addEventListener('click', function() {
         state.currentTile = cell;
         detectMine();
-        });
-     });  
-     mineField.forEach(function (cell){
+        })
+        })  
+        mineField.forEach(function (cell){
         cell.addEventListener("contextmenu", (event) => {
             event.preventDefault();
             state.currentTile = cell;
@@ -111,10 +91,11 @@ const init = () => {
     timeToStringConverter(time);
     startClock();
     randomiseMines(numberOfMines, rowLength, columnLength);
-    mineCounterDisplay();
+    mineDisplay.innerText = `Mines: 10`
     minesNearBy = 0;
     state.minesInPlay = 10;
     state.revealedTiles = 0;
+    goButton.style.display = 'none';
 };
 
 
@@ -126,7 +107,7 @@ const randomiseMines = (numberOfMines, rowLength, columnLength) => {
             field[randomRow][randomColumn] = 'm';
         } else {
             i--;
-            continue; // Skip the rest of the loop and start over with a new random position
+            continue; 
         }
         for (let a = randomRow - 1; a <= randomRow + 1; a++) {
             for (let b = randomColumn - 1; b <= randomColumn + 1; b++) {
@@ -136,7 +117,7 @@ const randomiseMines = (numberOfMines, rowLength, columnLength) => {
             }
         }
     }
-}    
+};    
 
 const timeToStringConverter = (time) => {
     let diffInHrs = time / 3600000;
@@ -153,8 +134,8 @@ const timeToStringConverter = (time) => {
 const startClock = () => {
     startTime = Date.now();
     setInterval(function printTime() {
-      elapsedTime = Date.now() - startTime;
-      document.getElementById("timer").innerHTML = timeToStringConverter(elapsedTime);
+    elapsedTime = Date.now() - startTime;
+    document.getElementById("timer").innerHTML = timeToStringConverter(elapsedTime);
     }, 1000);
 };
 
@@ -165,29 +146,25 @@ function resetTime() {
   
 const detectMine = () => {
 const id = state.currentTile.id;
-    let row = parseFloat(id[1]); // first X
-    let column = parseFloat(id[3]); // second X
-        if(field[row][column] === 'm') {
-    //console.log('mine');
-        landedOnMine();
-        } else if (field[row][column] !== 1) {
-        //recursion(row, column);
-        minesInProximity(row, column);  
-        state.revealedTiles += 1;
+    let row = parseFloat(id[1]); 
+    let column = parseFloat(id[3]); 
+    if(field[row][column] === 'm') {
+    landedOnMine();
+    } else if (field[row][column] !== 1) {
+    minesInProximity(row, column);  
+    state.revealedTiles += 1;
     }
 };
 
 const minesInProximity = (row, column) => {
-   // console.log(typeof row, row, typeof column, column)
     for (let i = row - 1; i <= row + 1; i++) {
         for (let c = column - 1; c <= column + 1; c++) {
             if (i === row && c === column) {
-                continue; // Skip the current iteration
+                continue; 
             }
             if (i >= 0 && i <= rowLength - 1 && c >= 0 && c <= columnLength - 1) {
                 if (field[i][c] === 'm') {
-                    minesNearBy++;
-                    
+                    minesNearBy++;    
                 }else{
                 recursion(row, column);
                }
@@ -213,6 +190,8 @@ if(cellDisplay === 0 ){
 }
 if(cellDisplay === 1){
     state.currentTile.style.color = 'blue';
+    
+    
 }
 if(cellDisplay === 2){
 state.currentTile.style.color = 'green'; 
@@ -229,7 +208,9 @@ if(cellDisplay === 5){
 if(cellDisplay === 4){
     state.currentTile.style.color = 'dark blue'; 
 }
-state.currentTile.style.fontSize = '3rem';
+state.currentTile.style.fontSize = '1.5rem';
+state.currentTile.style.alignItems = 'center';
+state.currentTile.style.justifyContent = 'center';
 
 state.currentTile.style.border= '0.2vmin solid darkgrey';
 minesNearBy = null;
@@ -241,20 +222,11 @@ const landedOnMine = () => {
     state.currentTile.style.backgroundSize = '100% 100%';
     state.currentTile.style.backgroundRepeat = 'no-repeat';
     state.currentTile.style.border = '0.2vmin solid darkgrey';
-    //state.minesInPlay -=1;
-   // mineCounterDisplay();
-    
-   // if(state.limbsLeft >= 1) {
-      //  state.limbsLeft -= 1;
-       // alert(`Landed on mine - lost a limb. ${state.limbsLeft} limbs left.`)
-   // }else if (state.limbsLeft < 1) {
-    
-   const gameOverAlert = () => { 
+    const gameOverAlert = () => { 
         alert('Game Over!'); 
         gameOver();
    }   
-   setTimeout(gameOverAlert, 1000);
-  
+   setTimeout(gameOverAlert, 1000); 
 };
 
 const gameOver = () => {
@@ -262,6 +234,7 @@ const gameOver = () => {
        [...toRemove].forEach((e) =>
        e.remove());
        mineDisplay.innerText = `Mines: 0`
+       goButton.style.display = 'inline';
 
 }
 
@@ -271,12 +244,12 @@ const mineCounterDisplay = (message) => {
 
 const placeFlag = () => {
     const id = state.currentTile.id;
-    let row = parseFloat(id[1]); // first X
-    let column = parseFloat(id[3]); // second X
+    let row = parseFloat(id[1]); 
+    let column = parseFloat(id[3]);
     if (field[row][column] === 1){
     return;
     }else{
-    state.currentTile.style.backgroundImage = "url('images/skull.png')";
+    state.currentTile.style.backgroundImage = "url('images/flag.png')";
     state.currentTile.style.backgroundSize = '100% 100%';
     state.currentTile.style.backgroundRepeat = 'no-repeat';
     state.currentTile.style.border = '0.2vmin solid darkgrey';
@@ -289,8 +262,7 @@ checkWinner();
 };
 
 const checkWinner = () => {
-    if (state.minesInPlay === 0 && state.revealedTiles >= 54) {
-        // All mines are flagged and all non-mine tiles are revealed
+    if (state.minesInPlay === 0 ) {
         gameWon();
     }
 };
@@ -301,15 +273,11 @@ const recursion = (row, column) => {
     if (row < 0 || row >= field.length || column < 0 || column >= field[0].length || field[row][column] === 'm' || field[row][column] === 'mnb' ||field[row][column] === '1') {
         return;
     }
-
     if (recursionElement.style.border === '0.2vmin solid darkgrey'){
         return;
     }else{
-
-
     recursionElement.style.border = '0.2vmin solid darkgrey';
     state.revealedTiles += 1;
-
     recursion(row - 1, column - 1);
     recursion(row - 1, column);
     recursion(row - 1, column + 1);
@@ -320,3 +288,24 @@ const recursion = (row, column) => {
     recursion(row + 1, column + 1);
     }
 };
+
+const gameWon = () => {
+mineDisplay.innerText = `Mines: 0`
+goButton.style.display = 'inline';
+const winMsg = document.createElement('h1');
+const field = document.getElementById('field');
+winMsg.innerText = 'Well done!';
+winMsg.style.color = 'red';
+const parentWidth = field.offsetWidth;
+const parentHeight = field.offsetHeight;
+const childWidth = winMsg.offsetWidth;
+const childHeight = winMsg.offsetHeight;
+const leftPosition = (parentWidth - childWidth) / 3;
+const topPosition = (parentHeight - childHeight) / 2;
+winMsg.style.position = 'absolute';
+winMsg.style.left = leftPosition + 'px';
+winMsg.style.top = topPosition + 'px';
+document.getElementById('field').appendChild(winMsg);
+
+};
+
