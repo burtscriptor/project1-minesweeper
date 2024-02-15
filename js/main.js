@@ -3,7 +3,7 @@ const state = {
     currentTile: null, // tracks the selectored cell
     minesInPlay: 10, // number of mines without flags, a descending number
     flags: null, // flags left to use, a decending number
-    //limbsLeft: 4, // counts the number of limbs left( lives), is a decending mumber
+    revealedTiles: null, //
 };
 
 minesNearBy = null;
@@ -114,17 +114,29 @@ const init = () => {
     mineCounterDisplay();
     minesNearBy = 0;
     state.minesInPlay = 10;
+    state.revealedTiles = 0;
 };
 
 
 const randomiseMines = (numberOfMines, rowLength, columnLength) => {
-    for(let i = 0; i < numberOfMines; i++) {
-        let randomRow =  Math.floor(Math.random() * rowLength)
-        let randomColumn = Math.floor(Math.random() * columnLength)
-        field[randomRow][randomColumn] !== 'm' ? field[randomRow][randomColumn] = 'm' : i--;
-   }
-};
-
+    for (let i = 0; i < numberOfMines; i++) {
+        let randomRow = Math.floor(Math.random() * rowLength);
+        let randomColumn = Math.floor(Math.random() * columnLength);
+        if (field[randomRow][randomColumn] !== 'm') {
+            field[randomRow][randomColumn] = 'm';
+        } else {
+            i--;
+            continue; // Skip the rest of the loop and start over with a new random position
+        }
+        for (let a = randomRow - 1; a <= randomRow + 1; a++) {
+            for (let b = randomColumn - 1; b <= randomColumn + 1; b++) {
+                if (a >= 0 && a < rowLength && b >= 0 && b < columnLength && (a !== randomRow || b !== randomColumn) && field[a] && field[a][b] !== 'm' && field[a][b] !== 'mnb') {
+                    field[a][b] = 'mnb';
+                }
+            }
+        }
+    }
+}    
 
 const timeToStringConverter = (time) => {
     let diffInHrs = time / 3600000;
@@ -159,8 +171,9 @@ const id = state.currentTile.id;
     //console.log('mine');
         landedOnMine();
         } else if (field[row][column] !== 1) {
-        recursion(row, column);
-            //minesInProximity(row, column);  
+        //recursion(row, column);
+        minesInProximity(row, column);  
+        state.revealedTiles += 1;
     }
 };
 
@@ -175,14 +188,15 @@ const minesInProximity = (row, column) => {
                 if (field[i][c] === 'm') {
                     minesNearBy++;
                     
-                //}else{
-                  //  recursion(row, column);
+                }else{
+                recursion(row, column);
                }
             }
         }
     }
     displayMinesNearBy();
     render(row, column);
+    checkWinner();
 };    
 
 const render = (row, column) => {
@@ -234,10 +248,12 @@ const landedOnMine = () => {
       //  state.limbsLeft -= 1;
        // alert(`Landed on mine - lost a limb. ${state.limbsLeft} limbs left.`)
    // }else if (state.limbsLeft < 1) {
+    
+   const gameOverAlert = () => { 
         alert('Game Over!'); 
         gameOver();
-       
-
+   }   
+   setTimeout(gameOverAlert, 1000);
   
 };
 
@@ -245,6 +261,7 @@ const gameOver = () => {
     const toRemove = document.body.getElementsByClassName('cell');
        [...toRemove].forEach((e) =>
        e.remove());
+       mineDisplay.innerText = `Mines: 0`
 
 }
 
@@ -267,31 +284,39 @@ const placeFlag = () => {
            mineDisplay.innerText = `Mines:${state.minesInPlay -= 1}`; 
         } 
 
-};
+}
+checkWinner();
 };
 
 const checkWinner = () => {
-    if (state.minesInPlay === 0 && state.revealedTiles === (totalTiles - totalMines)) {
+    if (state.minesInPlay === 0 && state.revealedTiles >= 54) {
         // All mines are flagged and all non-mine tiles are revealed
         gameWon();
     }
 };
 
 
-    const recursion = (row, column) => {
-    const id = state.currentTile.id;
-    row = parseFloat(id[1]); // first X
-    column = parseFloat(id[3]); // second X
-    if(field[row][column] === 0) {
-    for(let i = row -1; i <= row; i++) {
-        for(let c = column -1; c <= column; c++) {
-            if(i => 0 && i < field.length && c >= 0 && c < field[0].length && field[i][c] !== 'm' || field[i][c] !== '1'){
-                state.currentTile.style.backgroundColor = "pink";
-                recursion(row, column);
-                
-                
-            }    
-        }
+const recursion = (row, column) => {
+    let recursionElement =  document.getElementById(`r${row}c${column}`);
+    if (row < 0 || row >= field.length || column < 0 || column >= field[0].length || field[row][column] === 'm' || field[row][column] === 'mnb' ||field[row][column] === '1') {
+        return;
     }
-}
+
+    if (recursionElement.style.border === '0.2vmin solid darkgrey'){
+        return;
+    }else{
+
+
+    recursionElement.style.border = '0.2vmin solid darkgrey';
+    state.revealedTiles += 1;
+
+    recursion(row - 1, column - 1);
+    recursion(row - 1, column);
+    recursion(row - 1, column + 1);
+    recursion(row, column - 1);
+    recursion(row, column + 1);
+    recursion(row + 1, column - 1);
+    recursion(row + 1, column);
+    recursion(row + 1, column + 1);
+    }
 };
