@@ -7,6 +7,7 @@ const state = {
 };
 minesNearBy = null;
 let field = [] ;  
+winMsg = null;
 
 /*-----Variables-----*/
 const rowLength = 8;
@@ -21,6 +22,7 @@ let timerInterval;
 /*----- cached elements  -----*/
 const goButton = document.getElementById('go'); 
 mineDisplay = document.getElementById('mine display')
+
 
 /*----- event listeners -----*/
  goButton.addEventListener('click', function(){
@@ -96,6 +98,14 @@ const init = () => {
     state.minesInPlay = 10;
     state.revealedTiles = 0;
     goButton.style.display = 'none';
+    let removeMsg = document.getElementById('lose');
+    if (removeMsg) {
+        removeMsg.remove();
+    }
+    if (winMsg){
+        winMsg.remove();
+    }
+    
 };
 
 
@@ -223,7 +233,6 @@ const landedOnMine = () => {
     state.currentTile.style.backgroundRepeat = 'no-repeat';
     state.currentTile.style.border = '0.2vmin solid darkgrey';
     const gameOverAlert = () => { 
-        alert('Game Over!'); 
         gameOver();
    }   
    setTimeout(gameOverAlert, 1000); 
@@ -235,6 +244,18 @@ const gameOver = () => {
        e.remove());
        mineDisplay.innerText = `Mines: 0`
        goButton.style.display = 'inline';
+       const loseMsg = document.createElement('h1');
+       loseMsg.setAttribute('id', 'lose');
+const field = document.getElementById('field');
+loseMsg.innerText = 'BOOM!';
+loseMsg.style.color = 'red';
+loseMsg.style.fontSize = '25vh';
+loseMsg.style.position = 'absolute';
+loseMsg.style.alignItems = 'center';
+loseMsg.style.justifyContent = 'center';
+loseMsg.style.display = 'block';
+document.getElementById('field').appendChild(loseMsg);
+
 
 }
 
@@ -290,21 +311,19 @@ const recursion = (row, column) => {
 };
 
 const gameWon = () => {
+ const toRemove = document.body.getElementsByClassName('cell');
+       [...toRemove].forEach((e) =>
+       e.remove());
 mineDisplay.innerText = `Mines: 0`
 goButton.style.display = 'inline';
-const winMsg = document.createElement('h1');
+winMsg = document.createElement('h1');
 const field = document.getElementById('field');
 winMsg.innerText = 'Well done!';
 winMsg.style.color = 'red';
-const parentWidth = field.offsetWidth;
-const parentHeight = field.offsetHeight;
-const childWidth = winMsg.offsetWidth;
-const childHeight = winMsg.offsetHeight;
-const leftPosition = (parentWidth - childWidth) / 3;
-const topPosition = (parentHeight - childHeight) / 2;
+winMsg.style.fontSize = '25vh';
 winMsg.style.position = 'absolute';
-winMsg.style.left = leftPosition + 'px';
-winMsg.style.top = topPosition + 'px';
+winMsg.style.alignItems = 'center';
+winMsg.style.justifyContent = 'center';
 document.getElementById('field').appendChild(winMsg);
 
 };
