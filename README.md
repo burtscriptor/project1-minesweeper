@@ -1,5 +1,6 @@
-Mine Sweeper Intro
+Mine Sweeper Introduction
 ==================
+ [Mine Sweeper](https://burtscriptor.github.io/project1-minesweeper/)
 
 A classic logic puzzle game with its origins from back in the [1980s](https://en.wikipedia.org/wiki/Minesweeper_(video_game)).  The player is presented with a grid which may vary in size depending on the version. The grid has hidden mines which the play must discover but never uncover. Some [report](https://www.reddit.com/r/Minesweeper/comments/xq08qo/was_minesweeper_really_created_for_people_to/?rdt=49089) it was developed to assist computer users to transition to a mouse with two buttons; left and right. With both buttons having differnt functions within the game. The game as told the test of time. This version was developed with a responsive design in mind to also be played on smaller screens, such as a tablet or mobile phone.
 
@@ -36,10 +37,10 @@ You may play again by clicking the Play button.**
 *    _I wonder what happens if you place flags on all the tiles?_
 
 ## Play the game!
-Here is a link to [Mine Sweeper](https://burtscriptor.github.io/project1-minesweeper/) to play the game.
+Here is a link to [Mine Sweeper](https://burtscriptor.github.io/project1-minesweeper/).
 
 
- **Technologies Used**: [Javascript](https://en.wikipedia.org/wiki/JavaScript), [HTML](https://en.wikipedia.org/wiki/HTML) and [CSS](https://en.wikipedia.org/wiki/CSS) are the three languages used in the development of this version of Mine Sweeper. I utlised [Stack Overflow](https://stackoverflow.com/), [Chat GTP](https://chat.openai.com/), [W3School](https://www.w3schools.com/js/default.asp) - school is kool ;) and [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference) to assit development as I am new to software engineering.
+ **Technologies Used**: [Javascript](https://en.wikipedia.org/wiki/JavaScript), [HTML](https://en.wikipedia.org/wiki/HTML) and [CSS](https://en.wikipedia.org/wiki/CSS) are the three languages used in the development of this version of Mine Sweeper. I utlised [Stack Overflow](https://stackoverflow.com/), [W3School](https://www.w3schools.com/js/default.asp) - school is kool ;) and [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference) to assit development as I am new to software engineering.
 
 
   ☐ **Next Steps**: I think a _limbs left_ feature could be interesting? Don't you? There are still improvements to this basic version that need to be improved, not limited to but including centering the **Well done!** message.
